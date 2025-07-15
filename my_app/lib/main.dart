@@ -75,6 +75,9 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+
+    var names = ['Ahana', 'Adiba', 'Amna', 'Afifa' ];
+
     return Scaffold(
       appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to
@@ -85,11 +88,108 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Container(
-        child: ElevatedButton(onPressed: (){
-          print("Elevated Button Pressed");
-        }, child: Text("Click me")),
-      )
+      body: ListView.separated(itemBuilder: (context, index) {
+        return Text(names[index], style: TextStyle(fontSize: 21, fontWeight: FontWeight.w600),);
+      },
+      itemCount: names.length,
+        separatorBuilder: (context, index){
+        return Divider(
+        );
+        },
+
+      ),
+        
+
     );
   }
 }
+
+
+
+
+// Padding(
+// padding: EdgeInsets.all(8.0),
+// child: SingleChildScrollView(
+// child: Column(
+// crossAxisAlignment: CrossAxisAlignment.center,
+// children: [
+// SingleChildScrollView(
+// scrollDirection: Axis.horizontal,
+// child: Row(
+// children: [
+// Container(
+// margin: EdgeInsets.only(bottom: 11),
+// height: 200,
+// width: 200,
+// color: Colors.yellow,
+// child: Text('I am yellow container', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),),
+// ),
+// Container(
+// margin: EdgeInsets.only(bottom: 11),
+// height: 200,
+// width: 200,
+// color: Colors.yellow,
+// child: Text('I am yellow container', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),),
+// ),
+// Container(
+// margin: EdgeInsets.only(bottom: 11),
+// height: 200,
+// width: 200,
+// color: Colors.yellow,
+// child: Text('I am yellow container', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),),
+// ),
+// Container(
+// margin: EdgeInsets.only(bottom: 11),
+// height: 200,
+// width: 200,
+// color: Colors.yellow,
+// child: Text('I am yellow container', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),),
+// ),
+// Container(
+// margin: EdgeInsets.only(bottom: 11),
+// height: 200,
+// width: 200,
+// color: Colors.yellow,
+// child: Text('I am yellow container', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),),
+// ),
+// Container(
+// margin: EdgeInsets.only(bottom: 11),
+// height: 200,
+// width: 200,
+// color: Colors.yellow,
+// child: Text('I am yellow container', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),),
+// )
+// ],
+// ),
+// ),
+// Container(
+// margin: EdgeInsets.only(bottom: 11),
+// height: 200,
+// width: 200,
+// color: Colors.yellow,
+// child: Text('I am yellow container', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),),
+// ),
+// Container(
+// margin: EdgeInsets.only(bottom: 11),
+// height: 200,
+// width: 200,
+// color: Colors.yellow,
+// child: Text('I am yellow container', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),),
+// ),
+// Container(
+// margin: EdgeInsets.only(bottom: 11),
+// height: 200,
+// width: 200,
+// color: Colors.yellow,
+// child: Text('I am yellow container', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),),
+// ),
+// Container(
+// margin: EdgeInsets.only(bottom: 11),
+// height: 200,
+// width: 200,
+// color: Colors.yellow,
+// child: Text('I am yellow container', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),),
+// )
+// ],
+// ),
+// ),
