@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -77,6 +77,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
 
     var names = ['Ahana', 'Adiba', 'Amna', 'Afifa' ];
+    var email_input = TextEditingController();
+    var password_input = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -88,18 +90,67 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: ListView.separated(itemBuilder: (context, index) {
-        return Text(names[index], style: TextStyle(fontSize: 21, fontWeight: FontWeight.w600),);
-      },
-      itemCount: names.length,
-        separatorBuilder: (context, index){
-        return Divider(
-        );
-        },
+      body: Center(
 
-      ),
-        
+        child: Container(
+          width: 300,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextField(
+                controller: email_input,
+                decoration: InputDecoration(
+                  hintText: "Enter Email",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                      color: Colors.orange
+                    )
+                  )
+                )
+                ),
+              Container(height: 15,),
+              TextField(
+                controller: password_input,
+                keyboardType: TextInputType.phone,
+                obscureText: true,
+                decoration: InputDecoration(
+                  hintText: "Enter Password",
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(),
+                    borderRadius: BorderRadius.circular(10),
 
+                  ),
+                  suffixIcon: IconButton(
+                      icon: Icon(Icons.read_more, color: Colors.orange,), onPressed: (){
+
+    },
+    ),
+
+
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.orangeAccent,
+                    ),
+                    borderRadius: BorderRadius.circular(10)
+                  )
+                ),
+              ),
+              Container(height: 50,),
+              ElevatedButton(onPressed: (){
+                String Username = email_input.text.toString();
+                String Password = password_input.text.toString();
+                print(Username);
+                print(Password);
+
+              }, child: Text("Login"))
+            ],
+          ),
+
+
+          ),
+        ),
+      
     );
   }
 }
