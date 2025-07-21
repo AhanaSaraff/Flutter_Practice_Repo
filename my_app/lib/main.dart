@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl_browser.dart';
 
 void main() {
   runApp(const MyApp());
@@ -80,6 +81,13 @@ class _MyHomePageState extends State<MyHomePage> {
     var email_input = TextEditingController();
     var password_input = TextEditingController();
 
+    var time = DateTime.now();
+    var month;
+
+    if(time.month==7){
+      month = "July";
+    }
+
     return Scaffold(
       appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to
@@ -90,7 +98,25 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Text()
+      body: Center(child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("Select Date", style: TextStyle(fontSize: 20),),
+          ElevatedButton(onPressed: () async {
+            var time_picked = showTimePicker(context: context, initialTime: TimeOfDay.now(),
+            initialEntryMode: TimePickerEntryMode.input);
+
+            if(time_picked!=null){
+              print("Picked time is ${time_picked}");
+
+            }
+
+          }, child: Text("Show"))
+
+
+
+        ],
+      ))
       
     );
   }
