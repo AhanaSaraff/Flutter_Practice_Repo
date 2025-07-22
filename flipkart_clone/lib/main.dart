@@ -29,31 +29,59 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-  class _MyHomePageState extends State<MyHomePage>{
-  @override
-  Widget build(BuildContext context){
-    var arrColors = [
-      Colors.blue,
-      Colors.green,
-      Colors.orange,
-      Colors.cyan,
-      Colors.grey,
-      Colors.yellow,
-      Colors.purple
-    ];
-  return Scaffold(
-  appBar: AppBar(
-  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-  title: Text(widget.title),
-  ),
-  body:
-  );
+  class _MyHomePageState extends State<MyHomePage> {
+
+
+    void callBack() {
+      print("Hello");
+    }
+
+    @override
+    Widget build(BuildContext context) {
+      var arrColors = [
+        Colors.blue,
+        Colors.green,
+        Colors.orange,
+        Colors.cyan,
+        Colors.grey,
+        Colors.yellow,
+        Colors.purple
+      ];
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme
+              .of(context)
+              .colorScheme
+              .inversePrimary,
+          title: Text(widget.title),
+        ),
+        body: ElevatedButton(onPressed: callBack, child: Text("Click me"),
+        )
+      );
+    }
   }
-  }
 
 
 
-  
+  // GridView.extent(maxCrossAxisExtent: 250,
+  // crossAxisSpacing: 10,
+  // mainAxisSpacing: 10,
+  // children: [
+  //   Container(color: arrColors[0],),
+  //   Container(color: arrColors[1],),
+  //   Container(color: arrColors[2],),
+  //   Container(color: arrColors[3],),
+  //   Container(color: arrColors[4],),
+  //   Container(color: arrColors[5],),
+  //   Container(color: arrColors[6],),
+  // ],)
+  // );
+  // }
+  // }
+
+
+
+
 // Center(
 // child: Container(
 // width: 600,
@@ -92,4 +120,3 @@ class MyHomePage extends StatefulWidget {
 // ],
 // ),
 // ),
-// )
