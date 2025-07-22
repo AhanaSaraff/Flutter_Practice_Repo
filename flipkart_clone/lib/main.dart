@@ -32,12 +32,64 @@ class MyHomePage extends StatefulWidget {
   class _MyHomePageState extends State<MyHomePage>{
   @override
   Widget build(BuildContext context){
+    var arrColors = [
+      Colors.blue,
+      Colors.green,
+      Colors.orange,
+      Colors.cyan,
+      Colors.grey,
+      Colors.yellow,
+      Colors.purple
+    ];
   return Scaffold(
   appBar: AppBar(
   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
   title: Text(widget.title),
   ),
-  body: Center()
+  body:
   );
   }
   }
+
+
+
+  
+// Center(
+// child: Container(
+// width: 600,
+// height: 500,
+// child: GridView.count(crossAxisCount: 4,
+//
+// children: [
+// Padding(
+// padding: const EdgeInsets.all(8.0),
+// child: Container(color: arrColors[0],height: 100),
+// ),
+// Padding(
+// padding: const EdgeInsets.all(8.0),
+// child: Container(color: arrColors[1],height: 100),
+// ),
+// Padding(
+// padding: const EdgeInsets.all(8.0),
+// child: Container(color: arrColors[2],height: 100),
+// ),
+// Padding(
+// padding: const EdgeInsets.all(8.0),
+// child: Container(color: arrColors[3],height: 100),
+// ),
+// Padding(
+// padding: const EdgeInsets.all(8.0),
+// child: Container(color: arrColors[4],height: 100),
+// ),
+// Padding(
+// padding: const EdgeInsets.all(8.0),
+// child: Container(color: arrColors[5],height: 100),
+// ),
+// Padding(
+// padding: const EdgeInsets.all(8.0),
+// child: Container(color: arrColors[6],height: 100),
+// ),
+// ],
+// ),
+// ),
+// )
