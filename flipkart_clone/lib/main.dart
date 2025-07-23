@@ -55,8 +55,25 @@ class MyHomePage extends StatefulWidget {
               .inversePrimary,
           title: Text(widget.title),
         ),
-        body: ElevatedButton(onPressed: callBack, child: Text("Click me"),
+        body: Center(
+          child: RichText(text: TextSpan(
+            style: TextStyle(
+              fontSize: 25,
+              color: Colors.grey,
+            ),
+            children: <TextSpan>[
+              TextSpan(text: ("Hello ")),
+              TextSpan(text: ("World!!"), style: TextStyle(
+                fontSize: 34,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue
+              ))
+
+
+            ]
+          )),
         )
+        
       );
     }
   }
