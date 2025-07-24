@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 void main(){
   runApp(const flipkartclone());
@@ -31,22 +32,11 @@ class MyHomePage extends StatefulWidget {
 
   class _MyHomePageState extends State<MyHomePage> {
 
-
-    void callBack() {
-      print("Hello");
-    }
+  var Controller1, Controller2;
+  var result = "Result";
 
     @override
     Widget build(BuildContext context) {
-      var arrColors = [
-        Colors.blue,
-        Colors.green,
-        Colors.orange,
-        Colors.cyan,
-        Colors.grey,
-        Colors.yellow,
-        Colors.purple
-      ];
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme
@@ -56,22 +46,59 @@ class MyHomePage extends StatefulWidget {
           title: Text(widget.title),
         ),
         body: Center(
-          child: RichText(text: TextSpan(
-            style: TextStyle(
-              fontSize: 25,
-              color: Colors.grey,
+          child: Container(
+            width: 300,
+
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextField(
+
+                  controller: Controller1,
+                ),
+                TextField(
+                  controller: Controller2,
+                ),
+                Container(height: 20,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(onPressed: (){
+                      var no1 = int.parse(Controller1.text.toString());
+                      var no2 = int.parse(Controller2.text.toString());
+
+                      result = "Addition: ${no1 + no2}";
+                      print("Called");
+
+                      setState(() {
+
+                      });
+                    },
+                        child: Text("+",style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold ),)),
+                    ElevatedButton(onPressed: (){
+                      var no1 = int.parse(Controller1.text.toString());
+                      var no2 = int.parse(Controller2.text.toString());
+
+                      result = "Substraction: ${no1 - no2}";
+                      print("Called");
+
+                      setState(() {
+
+                      });
+                    },
+                        child: Text("-",style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold ),)),
+                    ElevatedButton(onPressed: (){
+                    },
+                        child: Text("*",style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold ),)),
+                    ElevatedButton(onPressed: (){},
+                        child: Text("/",style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold ),))
+                  ],
+                ),
+                SizedBox(height: 50,),
+                Text(result, style: TextStyle(fontSize: 30),)
+              ],
             ),
-            children: <TextSpan>[
-              TextSpan(text: ("Hello ")),
-              TextSpan(text: ("World!!"), style: TextStyle(
-                fontSize: 34,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue
-              ))
-
-
-            ]
-          )),
+          ),
         )
         
       );
