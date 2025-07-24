@@ -1,3 +1,4 @@
+import 'package:flipkart_clone/IntroPage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -15,17 +16,13 @@ class flipkartclone extends StatelessWidget{
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
       ),
-      home: const MyHomePage(title: 'Flipkart Home'),
+      home: IntroPage(),
     );
   }
 
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -43,7 +40,6 @@ class MyHomePage extends StatefulWidget {
               .of(context)
               .colorScheme
               .inversePrimary,
-          title: Text(widget.title),
         ),
         body: Center(
           child: Container(
