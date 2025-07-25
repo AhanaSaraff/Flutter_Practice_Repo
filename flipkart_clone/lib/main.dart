@@ -1,4 +1,5 @@
 import 'package:flipkart_clone/IntroPage.dart';
+import 'package:flipkart_clone/Splash_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -16,7 +17,7 @@ class flipkartclone extends StatelessWidget{
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
       ),
-      home: IntroPage(),
+      home: SplashScreen(),
     );
   }
 
