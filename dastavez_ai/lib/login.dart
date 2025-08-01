@@ -1,4 +1,6 @@
+import 'package:dastavez_ai/ForgotPassword.dart';
 import 'package:dastavez_ai/Home.dart';
+import 'package:dastavez_ai/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -98,7 +100,7 @@ class login extends State<LogIn>{
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Container(
                           width: 300,
@@ -120,10 +122,14 @@ class login extends State<LogIn>{
                           var success = loginUser(Email, Password.text.toString());
             
                           if(await success){
-                            print("Logged in");
+                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return HomePage();
+                            }));
                           }
                           else{
-                            print("Wrong Credentials");
+                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return MyHomePage();
+                            }));
             
                           }
             
@@ -137,7 +143,29 @@ class login extends State<LogIn>{
                         ) ,child: Container(
                             width: 90,
                             height: 40,
-                            child: Center(child: Text("Login",style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),))))
+                            child: Center(child: Text("Login",style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),)))),
+
+
+                        Container(
+                          height: 150,
+                          width: 500,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                                    return ForgotPassword();
+                                  }));
+                                },
+                                child: Text("Forgot Password",style: TextStyle(fontSize: 15, color: Color(0xFF587BB7)),),
+                              ),
+
+                              SizedBox(height: 30,)
+                            ],
+                          ),
+                        )
                     
                       ],
                     

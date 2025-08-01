@@ -164,18 +164,18 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         SizedBox(height: 40,),
                         ElevatedButton(onPressed: () async {
-                            var email = emailController;
-                            bool exists = await checkEmail(email.text.toString());
+                            var email = emailController.text.toString();
+                            bool exists = await checkEmail(email);
                             if(exists){
                               Navigator.push(context, MaterialPageRoute(builder: (context){
-                                return LogIn(email.text.trim());
+                                return LogIn(email);
                               }));
                             }
                             else
                               {
 
                                 Navigator.push(context, MaterialPageRoute(builder: (context){
-                                  return SignUP(email.text.trim());
+                                  return SignUP(email);
                                 }));
                               }
 
