@@ -1,3 +1,4 @@
+import 'package:dastavez_ai/Profile.dart';
 import 'package:dastavez_ai/main.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +24,7 @@ class HomePage extends StatelessWidget{
               SizedBox(height: 30,),
               ElevatedButton(onPressed: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context){
-                  return MyHomePage();
+                  return Profile();
                 }));
               },style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFFDEBE21),
