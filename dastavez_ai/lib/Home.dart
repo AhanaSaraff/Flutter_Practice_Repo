@@ -20,6 +20,15 @@ class HomePage extends StatelessWidget{
                 backgroundColor: Color(0xFFDEBE21),
                 foregroundColor: Color(0xFF1A1F2C),
               ) ,child: Text("Go Back")),
+              SizedBox(height: 30,),
+              ElevatedButton(onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return MyHomePage();
+                }));
+              },style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFDEBE21),
+                foregroundColor: Color(0xFF1A1F2C),
+              ) ,child: Text("View Profile")),
 
             ],
           ))),

@@ -156,7 +156,7 @@ class login extends State<LogIn>{
                               InkWell(
                                 onTap: (){
                                   Navigator.push(context, MaterialPageRoute(builder: (context){
-                                    return ForgotPassword();
+                                    return ForgotPassword(Email);
                                   }));
                                 },
                                 child: Text("Forgot Password",style: TextStyle(fontSize: 15, color: Color(0xFF587BB7)),),

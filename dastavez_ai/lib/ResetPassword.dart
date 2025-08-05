@@ -1,51 +1,45 @@
-import 'dart:convert';
-import 'package:dastavez_ai/ResetPassword.dart';
+import 'dart:async';
+
+import 'package:dastavez_ai/main.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 
-class ForgotPassword extends StatefulWidget{
+
+class ResetPassword extends StatefulWidget{
+
   var Email;
-  ForgotPassword(this.Email);
+  var OTP;
+  ResetPassword(this.Email, this.OTP);
+
   @override
-  State<ForgotPassword> createState() => _ForgotPasswordState(Email);
+  State<ResetPassword> createState() => _ResetPasswordState(Email, OTP);
 }
 
-class _ForgotPasswordState extends State<ForgotPassword> {
+
+class _ResetPasswordState extends State<ResetPassword> {
 
   var Email;
-  _ForgotPasswordState(this.Email);
+  var OTP;
+  _ResetPasswordState(this.Email, this.OTP);
 
-  var otp = TextEditingController();
+  var newPassword = TextEditingController();
 
-  Future<bool> requestPasswordReset(String email) async{
-    final url = Uri.parse("https://law-ai-7y05.onrender.com/auth/forgot-password");
+  var confirmPassword = TextEditingController();
 
-    final response = await http.post(
-      url,
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"email": email}),
-    );
-
-    if(response.statusCode == 200){
-      final data = jsonDecode(response.body);
-      return true;
-    }
-    else{
-      return false;
-    }
-  }
-
-  var result = "Send OTP";
-
-  Future<bool> verifyResetOTP(String email, String otp) async{
-    final url = Uri.parse("https://law-ai-7y05.onrender.com/auth/verify-reset-otp");
+  Future<bool> resetPassword(String email, String otp, String newPassword, String confirmPassword) async{
+    final url= Uri.parse("https://law-ai-7y05.onrender.com/auth/reset-password");
 
     final response = await http.post(
       url,
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"email": email, "otp": otp}),
+      headers: { "Content-Type": "application/json" },
+      body: jsonEncode({
+        "email":email,
+        "otp": otp,
+        "newPassword": newPassword,
+        "confirmPassword": confirmPassword,
+      }),
     );
 
     if(response.statusCode==200){
@@ -57,7 +51,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     }
   }
 
-
+  var result = "Process";
 
   @override
   Widget build(BuildContext context) {
@@ -104,39 +98,28 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    //Send OTP InkWell
-                    Container(
-                      width: 350,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          SizedBox(height: 20,),
-                          InkWell(
-                            onTap: () async{
-                              bool success = await requestPasswordReset(Email);
-                              if(success){
-                                setState(() {
-                                  result="Resend Otp";
-                                });
-                              }
-                              else{
-                                result = "Failed to send OTP";
-                              }
-                            },
-                            child: Text(result,style: TextStyle(fontSize: 15, color: Color(0xFF587BB7)),),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 40,),
-                    //OTP TextField
+                    //New Password TextField
                     Container(
                       width: 300,
                       child: TextField(
-                        controller: otp,
+                        controller: newPassword,
                         decoration: InputDecoration(
-                            labelText: 'Enter OTP',
+                            labelText: 'New Password',
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white, width: 1),
+                                borderRadius: BorderRadius.circular(30)
+                            )
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 40,),
+                    //Confirm Password TextField
+                    Container(
+                      width: 300,
+                      child: TextField(
+                        controller: confirmPassword,
+                        decoration: InputDecoration(
+                            labelText: 'Confirm Password',
                             enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white, width: 1),
                                 borderRadius: BorderRadius.circular(30)
@@ -147,15 +130,25 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     SizedBox(height: 40,),
                     //Proceed Button
                     ElevatedButton(onPressed: ()async{
-                      bool success = await verifyResetOTP(Email, otp.text.trim());
-                      if(success){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return ResetPassword(Email, otp.text.trim());
-                        }));
+
+                      var success = resetPassword(Email, OTP, newPassword.text.toString(), confirmPassword.text.toString());
+                      if(await success){
+                        setState(() {
+                          result = "Password Changed Successfully";
+                        });
+
+
+                        Future.delayed(const Duration(seconds: 5),(){
+                          Navigator.push(context, MaterialPageRoute(builder: (context){
+                            return MyHomePage();
+                          }));
+                        });
                       }
                       else{
-                        print("invalid otp");
+                        result="Something went wrong";
+
                       }
+
 
 
                     },style: ElevatedButton.styleFrom(
@@ -164,7 +157,17 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     ) , child: Container(
                         width: 90,
                         height: 40,
-                        child: Center(child: Text("Proceed",style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),))))
+                        child: Center(child: Text("Reset",style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),)))),
+
+                    SizedBox(height: 20,),
+                    // InkWell(
+                    //   onTap: (){
+                    //     Navigator.push(context, MaterialPageRoute(builder: (context){
+                    //       return MyHomePage();
+                    //     }));
+                    //   },
+                    //     child: Text("Home")),
+                    Text(result)
 
                   ],
 
