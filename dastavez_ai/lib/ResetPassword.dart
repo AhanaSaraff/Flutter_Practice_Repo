@@ -29,7 +29,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   var confirmPassword = TextEditingController();
 
   Future<bool> resetPassword(String email, String otp, String newPassword, String confirmPassword) async{
-    final url= Uri.parse("https://law-ai-7y05.onrender.com/auth/reset-password");
+    final url= Uri.parse("http://34.68.115.157:5000/auth/reset-password");
 
     final response = await http.post(
       url,

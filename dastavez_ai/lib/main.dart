@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // }
   
   Future<bool> checkEmail(String email) async{
-    final url = Uri.parse('https://law-ai-7y05.onrender.com/auth/check-email');
+    final url = Uri.parse('http://34.68.115.157:5000/auth/check-email');
 
     try{
       final response = await http.post(

@@ -30,7 +30,7 @@ class Signup extends State<SignUP>{
     required String confirmPassword,
     required String otp,
 }) async {
-    final url = Uri.parse("https://law-ai-7y05.onrender.com/auth/signup");
+    final url = Uri.parse("http://34.68.115.157:5000/auth/signup");
     final response = await http.post(
      url,
      headers: {"Content-Type": "application/json"},

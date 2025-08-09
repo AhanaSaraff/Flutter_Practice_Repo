@@ -20,7 +20,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   var otp = TextEditingController();
 
   Future<bool> requestPasswordReset(String email) async{
-    final url = Uri.parse("https://law-ai-7y05.onrender.com/auth/forgot-password");
+    final url = Uri.parse("http://34.68.115.157:5000/auth/forgot-password");
 
     final response = await http.post(
       url,
@@ -40,7 +40,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   var result = "Send OTP";
 
   Future<bool> verifyResetOTP(String email, String otp) async{
-    final url = Uri.parse("https://law-ai-7y05.onrender.com/auth/verify-reset-otp");
+    final url = Uri.parse("http://34.68.115.157:5000/auth/verify-reset-otp");
 
     final response = await http.post(
       url,

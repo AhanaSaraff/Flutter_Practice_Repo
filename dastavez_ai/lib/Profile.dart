@@ -1,15 +1,153 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 import 'package:dastavez_ai/Home.dart';
 import 'package:dastavez_ai/Messages.dart';
+import 'package:dastavez_ai/UpdateProfile.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget{
+
 
   @override
   State<Profile> createState() => _ProfileState();
 }
 
+//User Profile Class
+// class UserProfile{
+//   final String firstName;
+//   final String lastName;
+//   final String email;
+//   final String? profileImage;
+//   final String subscriptionStatus;
+//
+//   UserProfile({
+//     required this.firstName,
+//     required this.lastName,
+//     this.profileImage,
+//     required this.email,
+//     required this.subscriptionStatus,
+//   });
+//
+// }
+
 class _ProfileState extends State<Profile> {
+
+  Future<String?> uploadProfileImage(XFile pickedFile) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('authToken');
+      if (token == null) {
+        print("No auth token found");
+        return null;
+      }
+
+      final uri = Uri.parse("http://34.68.115.157:5000/api/profile/profile-image");
+      final request = http.MultipartRequest('POST', uri);
+      request.headers['Authorization'] = 'Bearer $token';
+
+      if (kIsWeb) {
+        final bytes = await pickedFile.readAsBytes();
+        request.files.add(
+          http.MultipartFile.fromBytes(
+            'profileImage',
+            bytes,
+            filename: pickedFile.name,
+          ),
+        );
+      } else {
+        request.files.add(
+          await http.MultipartFile.fromPath('profileImage', pickedFile.path),
+        );
+      }
+
+      final response = await request.send();
+      final respStr = await response.stream.bytesToString();
+      print("Upload response: $respStr");
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(respStr);
+        return data['imageUrl'];
+      } else {
+        print("Upload failed: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      print("Error uploading profile image: $e");
+      return null;
+    }
+  }
+
+
+
+
+  Timer? _timer;
+
+  @override
+  void initState(){
+    super.initState();
+    loadUserProfile();
+  }
+
   int currentPageIndex = 2;
+
+  String? firstName;
+  String? lastName;
+  String? email;
+  String? profileImage;
+  String? subscriptionStatus;
+  String? tokenn;
+
+
+
+  bool isLoading = true;
+
+  Future<void> loadUserProfile() async{
+    try{
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('authToken');
+
+      if(token == null){
+        print('No token found!');
+        return;
+      }
+
+      //Call Api
+      final response = await http.get(
+        Uri.parse('http://34.68.115.157:5000/auth/user'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if(response.statusCode == 200){
+        final data = json.decode(response.body);
+
+        setState(() {
+          firstName = data['firstName'];
+          lastName = data['lastName'];
+          email = data['email'];
+          profileImage = data['profileImage'];
+          subscriptionStatus = data['subscriptionStatus'];
+          isLoading = false;
+          tokenn = token;
+        });
+      }
+      else{
+        print('Failed to load profile: ${response.statusCode}');
+      }
+    }catch(e){
+      print('Error: $e');
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -50,18 +188,49 @@ class _ProfileState extends State<Profile> {
                         children: [
 
                           SizedBox(height: 30,),
-                          CircleAvatar(
-                            radius: 70.0,
-                            backgroundImage: AssetImage('assets/images/profile.jpg'),
+                          GestureDetector(
+                              onTap: () async {
+                                final picker = ImagePicker();
+                                final pickedFile = await picker.pickImage(
+                                  source: ImageSource.gallery,
+                                  imageQuality: 85,
+                                );
+
+                                if (pickedFile != null) {
+                                  String? newImageUrl = await uploadProfileImage(pickedFile); // now supports web + mobile
+
+                                  if (newImageUrl != null) {
+                                    setState(() {
+                                      profileImage = newImageUrl;
+                                    });
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text("Profile image updated!")),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text("Image upload failed")),
+                                    );
+                                  }
+                                }
+                              },
+                            child: CircleAvatar(
+                              radius: 60,
+                              backgroundImage: profileImage != null
+                                  ? NetworkImage(profileImage!)
+                                  : AssetImage('assets/images/profile.jpg') as ImageProvider,
+                            ),
                           ),
-                          SizedBox(height: 20,),
-                          Text("Ahana Saraff", style: TextStyle(color: Colors.white, fontSize: 25,),),
-                          Text("ahanasaraff@gmail.com", style: TextStyle(color: Colors.white, fontSize: 15,),),
+                          SizedBox(height: 16,),
+                          Text("$firstName $lastName", style: TextStyle(color: Colors.white, fontSize: 25,),),
+                          Text(email ?? '', style: TextStyle(color: Colors.white, fontSize: 15,),),
+                          // Text(tokenn!),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.star, color: Color(0xFFDEBE21),),
-                              Text("Premium", style: TextStyle(color: Color(0xFFDEBE21), fontSize: 18,),),
+                              Text(subscriptionStatus=='premium'?'Premium':'Free User', style: TextStyle(color: subscriptionStatus == 'premium'?Color(0xFFDEBE21):Colors.grey,fontSize: 16),)
+                              // Icon(Icons.star, color: Color(0xFFDEBE21),),
+                              // Text("Premium", style: TextStyle(color: Color(0xFFDEBE21), fontSize: 18,)),
+                              
                             ],
                           ),
                           Container(
@@ -94,7 +263,20 @@ class _ProfileState extends State<Profile> {
                                                   )
                                                 ]
                                               ),
-                                              child: Text("User Information", style: TextStyle(fontSize: 15),)),
+                                              child: InkWell(
+                                                  onTap: () async {
+                                                    final updated = await Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) => UpdateProfileScreen(),
+                                                      ),
+                                                    );
+
+                                                    if (updated == true) {
+                                                      loadUserProfile(); // refresh only if update happened
+                                                    }
+                                                  },
+                                                  child: Text("Edit Profile", style: TextStyle(fontSize: 15),))),
                                           SizedBox(height: 10,),
                                           Container(
                                               width: double.infinity,

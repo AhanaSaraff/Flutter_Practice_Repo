@@ -29,7 +29,7 @@ class login extends State<LogIn>{
   Widget build(BuildContext context) {
 
     Future<bool> loginUser(String email, String password) async{
-      final url = Uri.parse("https://law-ai-7y05.onrender.com/auth/login");
+      final url = Uri.parse("http://34.68.115.157:5000/auth/login");
 
       final response = await http.post(
         url,
@@ -43,7 +43,7 @@ class login extends State<LogIn>{
       if(response.statusCode==200) {
         final data = jsonDecode(response.body);
         final token = data['token'];
-        final prefs = await SharedPreferences.getInstance();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('authToken', token);
 
         return true;
