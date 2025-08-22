@@ -94,16 +94,17 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:Expanded(
-        child: Container(
+      body:Container(
             color: Color(0xFF1A1F2C),
             child: Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
+
                     child: Row(
                       children: [
+                        SizedBox(height: 25,),
                         Image.asset('assets/images/scales.png'),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,7 +196,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
 
         ),
-      ),
     );
   }
 }

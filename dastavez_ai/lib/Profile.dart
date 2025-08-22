@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
-
+import 'package:http_parser/http_parser.dart';
 import 'package:dastavez_ai/Home.dart';
 import 'package:dastavez_ai/Messages.dart';
 import 'package:dastavez_ai/UpdateProfile.dart';
@@ -18,75 +18,90 @@ class Profile extends StatefulWidget{
   State<Profile> createState() => _ProfileState();
 }
 
-//User Profile Class
-// class UserProfile{
-//   final String firstName;
-//   final String lastName;
-//   final String email;
-//   final String? profileImage;
-//   final String subscriptionStatus;
-//
-//   UserProfile({
-//     required this.firstName,
-//     required this.lastName,
-//     this.profileImage,
-//     required this.email,
-//     required this.subscriptionStatus,
-//   });
-//
-// }
-
 class _ProfileState extends State<Profile> {
 
-  Future<String?> uploadProfileImage(XFile pickedFile) async {
+
+  File? _imageFile;
+
+  // Future<bool> uploadProfileImage(File imageFile) async{
+  //   SharedPreferences prefs=await SharedPreferences.getInstance();
+  //   String? token = prefs.getString("authToken");
+  //  
+  //   if(token == null){
+  //     print("No auth token found");
+  //     return false;
+  //   }
+  //  
+  //   try {
+  //     var request = http.MultipartRequest('POST',
+  //     Uri.parse("http://34.68.115.157:5000/api/profile/profile-image"),
+  //     );
+  //
+  //     request.headers['Authorization']='Bearer $token';
+  //
+  //     request.files.add(
+  //       await http.MultipartFile.fromPath('profileImage', imageFile.path),
+  //     );
+  //
+  //     var response = await request.send();
+  //
+  //     if(response.statusCode == 200){
+  //       print("Profile Image uploaded successfully");
+  //       return true;
+  //     }
+  //     else{
+  //       String body = await response.stream.bytesToString();
+  //       print("Upload failed: ${response.statusCode} - $body");
+  //       return false;
+  //     }
+  //   }
+  //   catch(e){
+  //     print("Error uploading image: $e");
+  //     return false;
+  //   }
+  // }
+
+  String _getFileExtension(String path){
+    return path.split('.').last.toLowerCase();
+  }
+  Future<bool> uploadProfileImage(String originalPath) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString("authToken");
+
+    if (token == null) return false;
+
+    // Prepare the value exactly as your curl: @"C:\Users\Ahana saraff\Desktop\girl.jpg"
+      // remember double backslash to escape \
+
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('http://34.68.115.157:5000/api/profile/profile-image'),
+    );
+
+    request.headers['Authorization'] = 'Bearer $token';
+
+    // Add the profileImage field as a text field with the path string
+    request.files.add(
+      await http.MultipartFile.fromPath('profileImage', originalPath,
+      contentType: MediaType('image', _getFileExtension(originalPath))),
+    );
+
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('authToken');
-      if (token == null) {
-        print("No auth token found");
-        return null;
-      }
-
-      final uri = Uri.parse("http://34.68.115.157:5000/api/profile/profile-image");
-      final request = http.MultipartRequest('POST', uri);
-      request.headers['Authorization'] = 'Bearer $token';
-
-      if (kIsWeb) {
-        final bytes = await pickedFile.readAsBytes();
-        request.files.add(
-          http.MultipartFile.fromBytes(
-            'profileImage',
-            bytes,
-            filename: pickedFile.name,
-          ),
-        );
-      } else {
-        request.files.add(
-          await http.MultipartFile.fromPath('profileImage', pickedFile.path),
-        );
-      }
-
-      final response = await request.send();
-      final respStr = await response.stream.bytesToString();
-      print("Upload response: $respStr");
+      var response = await request.send();
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(respStr);
-        return data['imageUrl'];
+        print('Path sent successfully as multipart field');
+        return true;
       } else {
-        print("Upload failed: ${response.statusCode}");
-        return null;
+        String respStr = await response.stream.bytesToString();
+        print('Failed: ${response.statusCode} - $respStr');
+        return false;
       }
     } catch (e) {
-      print("Error uploading profile image: $e");
-      return null;
+      print('Error: $e');
+      return false;
     }
   }
-
-
-
-
-  Timer? _timer;
 
   @override
   void initState(){
@@ -196,22 +211,26 @@ class _ProfileState extends State<Profile> {
                                   imageQuality: 85,
                                 );
 
-                                if (pickedFile != null) {
-                                  String? newImageUrl = await uploadProfileImage(pickedFile); // now supports web + mobile
-
-                                  if (newImageUrl != null) {
-                                    setState(() {
-                                      profileImage = newImageUrl;
-                                    });
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text("Profile image updated!")),
-                                    );
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text("Image upload failed")),
-                                    );
-                                  }
+                                if(pickedFile != null){
+                                  setState(() {
+                                    _imageFile = File(pickedFile.path);
+                                    print(_imageFile?.path);
+                                  });
                                 }
+
+                                bool success = await uploadProfileImage(_imageFile!.path);
+                                if(success){
+                                  setState(() {
+                                    loadUserProfile();
+                                  });
+                                }
+                                else
+                                  {
+                                    print("Upload failed!");
+                                    print(_imageFile?.path);
+
+                                  }
+
                               },
                             child: CircleAvatar(
                               radius: 60,
@@ -223,7 +242,6 @@ class _ProfileState extends State<Profile> {
                           SizedBox(height: 16,),
                           Text("$firstName $lastName", style: TextStyle(color: Colors.white, fontSize: 25,),),
                           Text(email ?? '', style: TextStyle(color: Colors.white, fontSize: 15,),),
-                          // Text(tokenn!),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

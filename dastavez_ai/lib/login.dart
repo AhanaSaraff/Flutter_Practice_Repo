@@ -150,7 +150,7 @@ class login extends State<LogIn>{
                           height: 150,
                           width: 500,
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               InkWell(
@@ -162,7 +162,7 @@ class login extends State<LogIn>{
                                 child: Text("Forgot Password",style: TextStyle(fontSize: 15, color: Color(0xFF587BB7)),),
                               ),
 
-                              SizedBox(height: 30,)
+                              SizedBox(height: 40,)
                             ],
                           ),
                         )
