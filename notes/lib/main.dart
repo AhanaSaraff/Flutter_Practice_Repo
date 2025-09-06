@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:notes/counter_provider.dart';
 import 'package:notes/data/local/db_helper.dart';
 import 'package:notes/home_page.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,40 +21,47 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: "notes"),
+      home: ChangeNotifierProvider(create: (_)=>CounterProvider(),
+      child: MyHomePage()) ,
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class MyHomePage extends StatelessWidget {
 
-  final String title;
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   int _count = 0;
-
 
   @override
   Widget build(BuildContext context) {
+    print("Build function called");
     return Scaffold(
       appBar: AppBar(
         title: Text("Home"),
       ),
       body: Center(
-        child: Text("$_count", style: TextStyle(fontSize: 25),)
+        child: Consumer<CounterProvider>(
+          builder: (ctx, _, __){
+            print("Consumer build function called!!");
+            return Text(
+              "${Provider.of<CounterProvider>(ctx).getCount()}",
+              style: TextStyle(fontSize: 25),);
+          },
+        )
       ),
-      floatingActionButton: FloatingActionButton(onPressed: (){
-        _count++;
-        setState(() {
-
-        });
-      },
-      child: Icon(Icons.add),),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          FloatingActionButton(onPressed: (){
+            Provider.of<CounterProvider>(context, listen: false).incrementCount(5);
+          },
+          child: Icon(Icons.add),),
+          FloatingActionButton(onPressed: (){
+            Provider.of<CounterProvider>(context, listen: false).decrementCount();
+          },
+            child: Icon(Icons.remove),),
+        ],
+      ),
     );
   }
 }
