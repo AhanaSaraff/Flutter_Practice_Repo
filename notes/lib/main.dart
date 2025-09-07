@@ -2,10 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:notes/counter_provider.dart';
 import 'package:notes/data/local/db_helper.dart';
 import 'package:notes/home_page.dart';
+import 'package:notes/list_map_provider.dart';
+import 'package:notes/list_page.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (context) => ListMapProvider()),
+      ChangeNotifierProvider(create: (context) => CounterProvider())
+    ],
+    child: MyApp(),)
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -21,8 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: ChangeNotifierProvider(create: (_)=>CounterProvider(),
-      child: MyHomePage()) ,
+      home: ListPage()
     );
   }
 }
