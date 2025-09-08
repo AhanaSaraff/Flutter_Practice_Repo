@@ -36,6 +36,21 @@ class _HomePageState extends State<HomePage> {
 
       appBar: AppBar(
         title: Text("Notes App"),
+        actions: [
+          PopupMenuButton(itemBuilder: (_){
+            return [
+              PopupMenuItem(child: Row(
+                children: [
+                  Icon(Icons.settings),
+                  SizedBox(width: 11,),
+                  Text("Settings")
+                ],
+              ), onTap: (){
+
+              },)
+            ];
+          })
+        ],
       ),
 
       body: allNotes.isNotEmpty ? ListView.builder(
