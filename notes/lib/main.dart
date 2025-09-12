@@ -4,6 +4,7 @@ import 'package:notes/data/local/db_helper.dart';
 import 'package:notes/home_page.dart';
 import 'package:notes/list_map_provider.dart';
 import 'package:notes/list_page.dart';
+import 'package:notes/theme_provider.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +12,8 @@ void main() {
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider(create: (context) => ListMapProvider()),
-      ChangeNotifierProvider(create: (context) => CounterProvider())
+      ChangeNotifierProvider(create: (context) => CounterProvider()),
+      ChangeNotifierProvider(create: (context) => ThemeProvider())
     ],
     child: MyApp(),)
   );
@@ -26,7 +28,10 @@ class MyApp extends StatelessWidget {
 
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
+      themeMode: context.watch<ThemeProvider>().getThemeValue() ? ThemeMode.dark: ThemeMode.light,
+      darkTheme: ThemeData.dark(),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),

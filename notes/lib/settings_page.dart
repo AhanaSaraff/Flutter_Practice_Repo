@@ -1,13 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:notes/theme_provider.dart';
+import 'package:provider/provider.dart';
 
-class SettingPage extends StatefulWidget{
+class SettingPage extends StatelessWidget{
 
-  @override
-  State<SettingPage> createState() => _SettingPageState();
-}
-
-class _SettingPageState extends State<SettingPage> {
   bool isDarkMode = false;
 
   @override
@@ -17,9 +14,20 @@ class _SettingPageState extends State<SettingPage> {
         title: Text('Settings'),
 
       ),
-      body: SwitchListTile(value: isDarkMode, onChanged: (value){
-        isDarkMode = value;
-      }),
+      body: Consumer<ThemeProvider>(
+          builder: (ctx, provider, __){
+            return SwitchListTile.adaptive(
+                title: Text("Dark Mode"),
+                subtitle: Text("Change theme mode here"),
+                value: provider.getThemeValue(),
+                onChanged: (value){
+                  provider.updateTheme(value: value);
+                }
+            );
+
+      },
+      )
+
     );
   }
 }
