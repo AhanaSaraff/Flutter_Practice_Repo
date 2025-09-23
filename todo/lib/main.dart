@@ -144,6 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         setState(() {
                           tasks.add(taskController.text.toString());
                           checked.add(false);
+                          toDoTasks(tasks, checked.cast<String>());
                         });
                         Navigator.pop(context);
                         taskController.clear();
