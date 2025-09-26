@@ -36,25 +36,41 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController taskController = TextEditingController();
   List<String> tasks =[];
   List<bool> checked = [];
-  int _selectedIndex = 0;
   List<String> completed = [];
+  int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTasks();
+  }
+
+  void _loadTasks() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      tasks = prefs.getStringList('tasks') ?? [];
+      completed = prefs.getStringList('completed') ?? [];
+
+      List<String> checkedStrings = prefs.getStringList('checked') ?? [];
+      checked = checkedStrings.map((e) => e == 'true').toList();
+    });
+  }
+
+
+  void _saveTasks() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await prefs.setStringList('tasks', tasks);
+    await prefs.setStringList('completed', completed);
+    await prefs.setStringList('checked', checked.map((e) => e.toString()).toList());
+
+  }
 
   void _onItemTapped(int index){
     setState(() {
       _selectedIndex = index;
     });
-  }
-
-  void toDoTasks (List<String> tasks, List<String> checked) async{
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    await prefs.setStringList('tasks', tasks);
-    await prefs.setStringList('checked', checked);
-
-    final List<String>? items = prefs.getStringList('tasks');
-    print(items);
-
-
   }
 
 
@@ -64,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
     final List<Widget> _pages = [
+      //Tasks Page
       Center(
         child: ListView.builder(
             itemCount: tasks.length,
@@ -84,11 +101,15 @@ class _MyHomePageState extends State<MyHomePage> {
                             {
                               completed.remove(tasks[index]);
                             }
+                          _saveTasks();
+
                         });
                       })
               );
             }),
       ),
+
+      //Completed Page
       Center(
         child: ListView.builder(
             itemCount: completed.length,
@@ -102,6 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           if(newValue == false){
                             tasks.add(completed[index]);
                             completed.removeAt(index);
+                            _saveTasks();
                           }
                         });
                       })
@@ -144,7 +166,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         setState(() {
                           tasks.add(taskController.text.toString());
                           checked.add(false);
-                          toDoTasks(tasks, checked.cast<String>());
+                          _saveTasks();
+
                         });
                         Navigator.pop(context);
                         taskController.clear();
