@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:mini_ecommerce/data/grocery_data.dart';
 import 'package:mini_ecommerce/features/home/models/home_product_data_model.dart';
 
 part 'home_event.dart';
@@ -20,7 +21,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     emit(HomeLoadingState());
     await Future.delayed(Duration(seconds: 3));
-    emit(HomeLoadedSuccessState(products: products))
+    emit(HomeLoadedSuccessState(products: GroceryData.groceryProducts.map((e)=>ProductDataModel(
+        id: e['id'],
+        name: e['name'],
+        description: e['description'],
+        price: e['price'],
+        imageUrl: e['imageUrl'])).toList()
+    ));
   }
 
   FutureOr<void> homeProductWishlistButtonClickedEvent(
