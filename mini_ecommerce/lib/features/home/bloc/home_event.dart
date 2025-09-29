@@ -5,10 +5,7 @@ sealed class HomeEvent {}
 
 class HomeInitialEvent extends HomeEvent{}
 
-class HomeProductWishlistButtonClickedEvent extends HomeEvent {}
-
-class HomeProductCartButtonClickedEvent extends HomeEvent {}
-
-class HomeWishlistButtonNavigateEvent extends HomeEvent {}
-
-class HomeCartButtonNavigateEvent extends HomeEvent {}
+class HomeProductWishlistButtonClicked extends HomeEvent{}
+class HomeProductCartButtonClicked extends HomeEvent{}
+class HomeWishlistButtonNavigateEvent extends HomeEvent{}
+class HomeCartButtonNavigateEvent extends HomeEvent{}
