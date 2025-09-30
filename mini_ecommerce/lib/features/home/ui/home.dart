@@ -36,24 +36,43 @@ class _HomeState extends State<Home> {
         }
       },
       builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.teal,
-            foregroundColor: Colors.white,
-            title: Text('Mini E-Commerce App'),
-            actions: [
-              IconButton(onPressed: (){
-                homeBloc.add(HomeWishlistButtonNavigateEvent());
-              }, icon: Icon(Icons.favorite)),
-              IconButton(onPressed: (){
-                homeBloc.add(HomeCartButtonNavigateEvent());
-              }, icon: Icon(Icons.shopping_bag))
-            ],
-          ),
+        switch(state.runtimeType){
+          case HomeLoadingState:
+            return Scaffold(body: Center(
+              child: CircularProgressIndicator(),),);
+            break;
+          case HomeLoadedSuccessState:
+            return Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.teal,
+                foregroundColor: Colors.white,
+                title: Text('Mini E-Commerce App'),
+                actions: [
+                  IconButton(onPressed: (){
+                    homeBloc.add(HomeWishlistButtonNavigateEvent());
+                  }, icon: Icon(Icons.favorite)),
+                  IconButton(onPressed: (){
+                    homeBloc.add(HomeCartButtonNavigateEvent());
+                  }, icon: Icon(Icons.shopping_bag))
+                ],
+              ),
 
-        );
+            );
+            break;
+          case HomeErrorState:
+            return Scaffold(
+              body: Center(child: Text("Error"),)
+            );
+            break;
+          default:
+            return SizedBox();
+
+        }
+
       },
     );
   }
 
 }
+
+

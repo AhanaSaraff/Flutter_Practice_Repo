@@ -3,7 +3,7 @@ class ProductDataModel{
   final String id;
   final String name;
   final String description;
-  final double price;
+  final int price;
   final String imageUrl;
 
   ProductDataModel({
