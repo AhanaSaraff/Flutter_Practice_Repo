@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_ecommerce/features/cart/ui/cart.dart';
 import 'package:mini_ecommerce/features/home/bloc/home_bloc.dart';
+import 'package:mini_ecommerce/features/home/ui/product_tile_widget.dart';
 import 'package:mini_ecommerce/features/wishlist/ui/wishlist.dart';
 
 class Home extends StatefulWidget {
@@ -40,8 +41,8 @@ class _HomeState extends State<Home> {
           case HomeLoadingState:
             return Scaffold(body: Center(
               child: CircularProgressIndicator(),),);
-            break;
           case HomeLoadedSuccessState:
+            final successState = state as HomeLoadedSuccessState;
             return Scaffold(
               appBar: AppBar(
                 backgroundColor: Colors.teal,
@@ -56,14 +57,17 @@ class _HomeState extends State<Home> {
                   }, icon: Icon(Icons.shopping_bag))
                 ],
               ),
+              body: ListView.builder(
+                  itemCount: successState.products.length,
+                  itemBuilder: (context, index){
+                return ProductTileWidget(productDataModel: successState.products[index]);
+              }),
 
             );
-            break;
           case HomeErrorState:
             return Scaffold(
               body: Center(child: Text("Error"),)
             );
-            break;
           default:
             return SizedBox();
 
